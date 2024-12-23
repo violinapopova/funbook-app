@@ -18,7 +18,7 @@ import {
   Poppins_400Regular,
   Poppins_700Bold
 } from "@expo-google-fonts/poppins";
-import { UserListContext } from "./src/Context";
+import { UserListContext } from "./src/Context.js";
 import users from "./docs/users.json";
 
 const Stack = createStackNavigator();
