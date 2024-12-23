@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { useState } from "react";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Login } from "./src/surfaces/Login";
@@ -11,24 +11,15 @@ import { AddPost } from "./src/surfaces/AddPost";
 import { Conversations } from "./src/surfaces/Conversations";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context"; 
+import * as SplashScreen from 'expo-splash-screen';
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
   Poppins_400Regular,
   Poppins_700Bold
 } from "@expo-google-fonts/poppins";
-import { UserListContext } from "./src/Context";
-import users from "./docs/users.json";
 
 const Stack = createStackNavigator();
-
-const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: "rgb(255, 255, 255)",
-  },
-};
 
 const Tab = createBottomTabNavigator();
 
@@ -86,8 +77,7 @@ export default function App() {
   
   return (
     <SafeAreaProvider>
-      <UserListContext.Provider value={{ userList: users }}>
-      <NavigationContainer theme={MyTheme}>
+      <NavigationContainer>
         <Stack.Navigator>
           {!userLoggedIn ? (
             <Stack.Screen name="Login" component={Login} />
@@ -100,7 +90,6 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
-      </UserListContext.Provider>
     </SafeAreaProvider>
   );
 }
