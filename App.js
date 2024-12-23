@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Login } from "./src/surfaces/Login";
@@ -18,8 +18,18 @@ import {
   Poppins_400Regular,
   Poppins_700Bold
 } from "@expo-google-fonts/poppins";
+import { UserListContext } from "./src/Context";
+import users from "./docs/users.json";
 
 const Stack = createStackNavigator();
+
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: "rgb(255, 255, 255)",
+  },
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -77,7 +87,8 @@ export default function App() {
   
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <UserListContext.Provider value={{ userList: users }}>
+      <NavigationContainer theme={MyTheme}>
         <Stack.Navigator>
           {!userLoggedIn ? (
             <Stack.Screen name="Login" component={Login} />
@@ -90,6 +101,7 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+      </UserListContext.Provider>
     </SafeAreaProvider>
   );
 }
