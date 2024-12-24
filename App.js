@@ -8,20 +8,20 @@ import { Feed } from "./src/surfaces/Feed";
 import { Profile } from "./src/surfaces/Profile";
 import { Favorites } from "./src/surfaces/Favorites";
 import { AddPost } from "./src/surfaces/AddPost";
-import { Conversations } from "./src/surfaces/Conversations";
+import { ConversationsNavigation } from "./src/surfaces/ConversationsNavigation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context"; 
-import * as SplashScreen from 'expo-splash-screen';
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
   Poppins_400Regular,
   Poppins_700Bold
 } from "@expo-google-fonts/poppins";
-import { UserListContext } from "./src/Context.js";
+import { UserListContext } from "./src/Context";
 import users from "./docs/users.json";
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const MyTheme = {
   ...DefaultTheme,
@@ -30,8 +30,6 @@ const MyTheme = {
     background: "rgb(255, 255, 255)",
   },
 };
-
-const Tab = createBottomTabNavigator();
 
 function Home() {
   return (
@@ -66,7 +64,7 @@ function Home() {
       })}
     >
       <Tab.Screen name="Feed" component={Feed} />
-      <Tab.Screen name="Conversations" component={Conversations} />
+      <Tab.Screen name="Conversations" component={ConversationsNavigation} />
       <Tab.Screen name="AddPost" component={AddPost} />
       <Tab.Screen name="Favorites" component={Favorites} />
       <Tab.Screen name="Profile" component={Profile} />
@@ -88,19 +86,19 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <UserListContext.Provider value={{ userList: users }}>
-      <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator>
-          {!userLoggedIn ? (
-            <Stack.Screen name="Login" component={Login} />
-          ) : (
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{ headerShown: false }}
-            />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+        <NavigationContainer theme={MyTheme}>
+          <Stack.Navigator>
+            {!userLoggedIn ? (
+              <Stack.Screen name="Login" component={Login} />
+            ) : (
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{ headerShown: false }}
+              />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
       </UserListContext.Provider>
     </SafeAreaProvider>
   );
