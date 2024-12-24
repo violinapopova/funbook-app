@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,7 +11,7 @@ import { AddPost } from "./src/surfaces/AddPost";
 import { ConversationsNavigation } from "./src/surfaces/ConversationsNavigation";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context"; 
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from 'expo-splash-screen';
 import {
   useFonts,
   Poppins_400Regular,
@@ -74,15 +74,37 @@ function Home() {
 
 export default function App() {
   const [userLoggedIn, setIsUserLoggedIn] = useState(true);
+  const [appIsReady, setAppIsReady] = useState(false);
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } 
-  
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = async () => {
+    if (appIsReady && fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  };
+
+  if (!appIsReady || !fontsLoaded) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <UserListContext.Provider value={{ userList: users }}>
