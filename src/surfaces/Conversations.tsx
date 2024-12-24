@@ -69,7 +69,7 @@ export const Conversations = ({ navigation }) => {
             placeholder='search contacts'
           />
           <Ionicons
-            name='md-search'
+            name='search'
             size={24}
             color='#000000'
             style={{ position: "absolute", left: 28, top: 6 }}
