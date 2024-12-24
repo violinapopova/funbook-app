@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, FlatList, Text, StyleSheet } from "react-native";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from 'expo-splash-screen';
 import { requestBase } from "../utils/Constants";
+
+SplashScreen.preventAutoHideAsync();
 
 export const ListOfMessages = ({ conversationId }) => {
   const [messages, setMessages] = useState(null);
@@ -10,14 +12,16 @@ export const ListOfMessages = ({ conversationId }) => {
     const response = await fetch(
       requestBase + "/messages/" + conversationId + ".json"
     );
-    setMessages(await response.json());
+    const data = await response.json();
+    setMessages(data);
   }
 
   useEffect(() => {
     fetchMessages();
   }, []);
+
   if (!messages) {
-    return <AppLoading />;
+    return null;
   }
 
   const renderItem = ({ item }) => {
@@ -33,11 +37,7 @@ export const ListOfMessages = ({ conversationId }) => {
     );
   };
   return (
-    <View
-      style={{
-        paddingHorizontal: 20,
-      }}
-    >
+      <View onLayout={onLayoutRootView} style={{ paddingHorizontal: 20 }}>
       <FlatList
         data={messages.messages}
         renderItem={renderItem}
