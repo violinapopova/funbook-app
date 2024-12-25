@@ -20,6 +20,12 @@ export const ListOfMessages = ({ conversationId }) => {
     fetchMessages();
   }, []);
 
+  const onLayoutRootView = useCallback(async () => {
+    if (messages) {
+      await SplashScreen.hideAsync();
+    }
+  }, [messages]);
+
   if (!messages) {
     return null;
   }
