@@ -87,7 +87,7 @@ export const Home = () => {
                   shadowRadius: 4,
                 }}
               />
-              <Ionicons name='add-circle-outline' color='#ffffff' size={36} />
+              <Ionicons name='add-circle-outline' color='#000' size={36} />
             </View>
           ),
         }}

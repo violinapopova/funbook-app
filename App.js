@@ -19,6 +19,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import { UserListContext } from "./src/Context";
 import users from "./docs/users.json";
+import { requestBase } from "./src/utils/Constants";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -75,10 +76,17 @@ function Home() {
 export default function App() {
   const [userLoggedIn, setIsUserLoggedIn] = useState(true);
   const [appIsReady, setAppIsReady] = useState(false);
+  const [userList, setUserList] = useState(null);
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold
   });
+
+  async function fetchUserData(id) {
+    const response = await fetch(requestBase + "/users.json");
+    const data = await response.json();
+    return data;
+  }
 
   useEffect(() => {
     async function prepare() {
@@ -93,6 +101,7 @@ export default function App() {
     }
 
     prepare();
+    fetchUserData();
   }, []);
 
   const onLayoutRootView = async () => {
@@ -105,6 +114,7 @@ export default function App() {
     return null;
   }
 
+  console.log("userList", userList);
   return (
     <SafeAreaProvider>
       <UserListContext.Provider value={{ userList: users }}>
@@ -113,11 +123,13 @@ export default function App() {
             {!userLoggedIn ? (
               <Stack.Screen name="Login" component={Login} />
             ) : (
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{ headerShown: false }}
-              />
+              <>
+                <Stack.Screen name="Home" options={{ headerShown: false }}>
+                  {(props) => <Home {...props} userList={userList} />}
+                </Stack.Screen> 
+                <Stack.Screen name="ConversationsNav" component={ConversationsNavigation} options={{ headerShown: false }} />
+              </>
+              
             )}
           </Stack.Navigator>
         </NavigationContainer>

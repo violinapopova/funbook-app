@@ -16,29 +16,35 @@ export const ListOfAvatars = () => {
       </Pressable>
     );
   };
+
   return (
     <UserListContext.Consumer>
-      {({ userList }) => (
-        <View
-          style={{
-            zIndex: 100,
-            paddingVertical: 30,
-            paddingLeft: 20,
-            backgroundColor: "rgba(255,255,255, 0.85)",
-          }}
-        >
-          <FlatList
-            data={userList}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            horizontal
-            ListHeaderComponent={<ListHeaderComponent />}
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={86}
-            decelerationRate='fast'
-          />
-        </View>
-      )}
+      {({ userList }) => {
+        if (!userList) {
+          return null;
+        }
+        return (
+          <View
+            style={{
+              zIndex: 100,
+              paddingVertical: 30,
+              paddingLeft: 20,
+              backgroundColor: "rgba(255,255,255, 0.85)",
+            }}
+          >
+            <FlatList
+              data={userList}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal
+              ListHeaderComponent={<ListHeaderComponent />}
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={86}
+              decelerationRate='fast'
+            />
+          </View>
+        );
+      }}
     </UserListContext.Consumer>
   );
 };
